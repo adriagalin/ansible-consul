@@ -8,9 +8,12 @@
     pkg=dnsmasq
     state=installed
 
-- name: configure dnsmasq
+- name: configure consul dnsmasq
   copy: >
     content='server=/{{ consul_domain }}/127.0.0.1#8600'
     dest=/etc/dnsmasq.d/10-consul
   notify:
     - restart dnsmasq
+
+- name: configure dnsmasq
+  template: src=etc/dnsmasq.conf.j2 dest=/etc/dnsmasq.conf
