@@ -6,3 +6,4 @@
   command: systemctl daemon-reload
 - name: restart dnsmasq
   service: name=dnsmasq state=restarted enabled=yes
+  when: configurednsmasq.changed

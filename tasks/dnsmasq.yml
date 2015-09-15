@@ -17,3 +17,5 @@
 
 - name: configure dnsmasq
   template: src=etc/dnsmasq.conf.j2 dest=/etc/dnsmasq.conf
+  register: configurednsmasq
+  notify: restart dnsmasq
