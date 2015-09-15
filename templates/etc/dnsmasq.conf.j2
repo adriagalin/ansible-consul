@@ -96,8 +96,8 @@
 #except-interface=
 # Or which to listen on by address (remember to include 127.0.0.1 if
 # you use this.)
-{% if dnsmasq_listen_address %}
-listen-address={{ dns_listen_address }}
+{% if dnsmasq_listen_address is defined %}
+listen-address={{ dnsmasq_listen_address }}
 {% else %}
 #listen-address=
 {% endif %}
