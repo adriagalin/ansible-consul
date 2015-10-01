@@ -4,6 +4,6 @@
 - name: reload systemd
   sudo: yes
   command: systemctl daemon-reload
-- name: restart dnsmasq
+- name: restart dnsmasq consul
   service: name=dnsmasq state=restarted enabled=yes
-  when: configurednsmasq.changed
+  when: configurednsmasq.changed or configureconsul.changed
