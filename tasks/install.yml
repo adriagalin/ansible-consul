@@ -38,7 +38,6 @@
     group={{consul_group}}
   with_items:
     - "{{ consul_home }}"
-    - "{{ consul_home }}/bin"
     - "{{ consul_home }}/cert"
     - "{{ consul_data_dir }}"
     - "{{ consul_config_dir }}"
@@ -46,7 +45,7 @@
 - name: copy and unpack
   unarchive: >
     src={{ consul_download_folder }}/{{ consul_archive }}
-    dest={{ consul_home }}/bin
+    dest={{ consul_system_path }}
     copy=no
   when: consul_was_downloaded|changed
 
@@ -89,6 +88,17 @@
     recurse=yes
   when: consul_was_downloaded|changed
 
+- name: copy consul init script
+  template: >
+    src=consul.init.j2
+    dest=/etc/init.d/consul
+    owner={{consul_user}}
+    group={{consul_group}}
+    mode=0755
+  when: consul_use_init
+  notify:
+    - restart consul
+
 - name: copy consul upstart script
   template: >
     src={{consul_upstart_template}}
@@ -112,18 +122,10 @@
     - reload systemd
     - restart consul
 
-- name: add consul to path through profile.d
-  template: >
-    src=consul.sh.j2
-    dest=/etc/profile.d/consul.sh
-    owner=root
-    group=root
-    mode=0755
-
 - name: copy consulkv script
   template: >
     src=consulkv.j2
-    dest={{consul_home}}/bin/consulkv
+    dest={{consul_system_path}}/consulkv
     owner={{consul_user}}
     group={{consul_group}}
     mode=0755
