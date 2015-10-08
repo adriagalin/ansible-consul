@@ -3,6 +3,7 @@
   apt: >
     update_cache=yes
     cache_valid_time=3600
+  ignore_errors: True
 
 - name: install deps
   apt: >
@@ -10,7 +11,7 @@
     state=installed
   with_items:
     - unzip
-    - jq
+    # - jq
 
 - name: download consul
   get_url: >
@@ -135,4 +136,4 @@
     group={{consul_group}}
     mode=0755
   register: configureconsul
-  notify: restart dnsmasq
+  notify: restart dnsmasq consul

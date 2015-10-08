@@ -2,6 +2,7 @@
   apt: >
     update_cache=yes
     cache_valid_time=3600
+  ignore_errors: True
 
 - name: install deps
   apt: >
@@ -13,9 +14,9 @@
     content='server=/{{ consul_domain }}/127.0.0.1#8600'
     dest=/etc/dnsmasq.d/10-consul
   notify:
-    - restart dnsmasq
+    - restart dnsmasq consul
 
 - name: configure dnsmasq
   template: src=etc/dnsmasq.conf.j2 dest=/etc/dnsmasq.conf
   register: configurednsmasq
-  notify: restart dnsmasq
+  notify: restart dnsmasq consul

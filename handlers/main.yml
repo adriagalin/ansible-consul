@@ -6,4 +6,4 @@
   command: systemctl daemon-reload
 - name: restart dnsmasq consul
   service: name=dnsmasq state=restarted enabled=yes
-  when: configurednsmasq.changed or configureconsul.changed
+  when: (configurednsmasq.changed or configureconsul.changed) and consul_install_dnsmasq
