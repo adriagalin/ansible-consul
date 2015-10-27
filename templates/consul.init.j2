@@ -35,6 +35,8 @@ SCRIPTNAME=/etc/init.d/$NAME
 # Depend on lsb-base (>= 3.0-6) to ensure that this file is present.
 . /lib/lsb/init-functions
 
+export GOMAXPROCS=2
+
 #
 # Function that starts the daemon/service
 #
@@ -53,6 +55,7 @@ do_start()
 
     echo -n "Waiting for consul daemon to be listening..."
     for i in `seq 1 30`; do
+        sleep 1
         if ! start-stop-daemon --quiet --stop --test --pidfile $PIDFILE --exec $DAEMON --user $USER; then
             echo " FAIL: consul process died"
             return 2
@@ -62,7 +65,6 @@ do_start()
             return 0
         fi
         echo -n .
-        sleep 1
     done
     echo " FAIL: consul process is alive, but is not listening."
     return 2
